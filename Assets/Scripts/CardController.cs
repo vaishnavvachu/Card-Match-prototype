@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 public class CardController : MonoBehaviour
@@ -17,10 +18,12 @@ public class CardController : MonoBehaviour
         if (firstCard == null)
         {
             firstCard = card;
+            ScaleCard(card.transform, true);
         }
         else
         {
             secondCard = card;
+            ScaleCard(card.transform, true);
             CheckMatch();
         }
     }
@@ -29,22 +32,46 @@ public class CardController : MonoBehaviour
     {
         if (firstCard.cardID == secondCard.cardID)
         {
+            // Cards match
             firstCard.isMatched = true;
             secondCard.isMatched = true;
-
-            Debug.Log("OK+++++++++++++Matched");
-            // Handle match (e.g., scoring)
+            DestroyMatchedCards();
         }
         else
         {
-            Debug.Log("X----------------MisMatched");
-            Invoke(nameof(ResetCards), 1f);
+            
+            Invoke(nameof(ResetSelection), 0.5f); 
         }
     }
 
-    private void ResetCards()
+
+    private void DestroyMatchedCards()
     {
+        firstCard.transform.DOScale(0, 0.5f).SetEase(Ease.InBack).OnComplete(() => Destroy(firstCard.gameObject));
+        secondCard.transform.DOScale(0, 0.5f).SetEase(Ease.InBack).OnComplete(() => Destroy(secondCard.gameObject));
+
         firstCard = null;
         secondCard = null;
+    }
+
+    private void ResetSelection()
+    {
+        if (firstCard != null)
+        {
+            firstCard.GetComponent<CardFlip>().ResetFlip(); 
+            firstCard = null;
+        }
+        if (secondCard != null)
+        {
+            secondCard.GetComponent<CardFlip>().ResetFlip(); 
+            secondCard = null;
+        }
+    }
+
+
+    private void ScaleCard(Transform cardTransform, bool scaleUp)
+    {
+        float targetScale = scaleUp ? 1.2f : 1f;
+        cardTransform.DOScale(targetScale, 0.2f).SetEase(Ease.OutBack);
     }
 }
