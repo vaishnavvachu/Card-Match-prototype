@@ -238,7 +238,7 @@ MonoBehaviour:
   cardPrefab: {fileID: 5112373925582212918, guid: 463046611bc098c4f9089c7758d752ed, type: 3}
   cardParent: {fileID: 2027840100}
   gridSize: {x: 4, y: 4}
-  spacing: 1.5
+  spacing: 2
 --- !u!4 &1253096596
 Transform:
   m_ObjectHideFlags: 0

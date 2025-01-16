@@ -58,15 +58,22 @@ public class CardController : MonoBehaviour
     {
         if (firstCard != null)
         {
-            firstCard.GetComponent<CardFlip>().ResetFlip(); 
+            ResetCardState(firstCard);
             firstCard = null;
         }
         if (secondCard != null)
         {
-            secondCard.GetComponent<CardFlip>().ResetFlip(); 
+            ResetCardState(secondCard);
             secondCard = null;
         }
     }
+
+    private void ResetCardState(Card card)
+    {
+        card.GetComponent<CardFlip>().ResetFlip(); 
+        card.transform.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutBack); 
+    }
+
 
 
     private void ScaleCard(Transform cardTransform, bool scaleUp)

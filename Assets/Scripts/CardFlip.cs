@@ -19,7 +19,9 @@ public class CardFlip : MonoBehaviour
     {
         isFlipped = false;
         ShowBack();
+        transform.rotation = Quaternion.identity; 
     }
+
 
     private void ShowBack()
     {
