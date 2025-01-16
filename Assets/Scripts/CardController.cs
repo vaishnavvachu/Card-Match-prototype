@@ -6,6 +6,8 @@ public class CardController : MonoBehaviour
     public static CardController Instance;
     private Card firstCard, secondCard;
 
+    public int Turns { get; private set; } 
+    public int Matches { get; private set; }
     private void Awake()
     {
         Instance = this;
@@ -30,11 +32,15 @@ public class CardController : MonoBehaviour
 
     private void CheckMatch()
     {
+        Turns++;
+        Debug.Log("TURNS: "+Turns);
         if (firstCard.cardID == secondCard.cardID)
         {
             // Cards match
             firstCard.isMatched = true;
             secondCard.isMatched = true;
+            Matches++;
+            Debug.Log("MATCHES: "+Matches);
             DestroyMatchedCards();
         }
         else

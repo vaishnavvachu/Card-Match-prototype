@@ -6,8 +6,8 @@ public class CardFlip : MonoBehaviour
 {
     private bool isFlipped = false;
     private SpriteRenderer spriteRenderer;
-    public Sprite frontSprite; 
-    public Sprite backSprite;  
+    //public Sprite frontSprite; 
+    //public Sprite backSprite;  
 
     void Start()
     {
@@ -25,13 +25,13 @@ public class CardFlip : MonoBehaviour
 
     private void ShowBack()
     {
-        spriteRenderer.sprite = backSprite;
+        //spriteRenderer.sprite = backSprite;
         transform.rotation = Quaternion.identity; 
     }
 
     private void ShowFront()
     {
-        spriteRenderer.sprite = frontSprite;
+        //spriteRenderer.sprite = frontSprite;
     }
 
     private void OnMouseDown()

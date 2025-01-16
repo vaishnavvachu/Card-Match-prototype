@@ -102,6 +102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardID: 0
   isMatched: 0
+  frontSpriteRenderer: {fileID: 5112373925582212919}
 --- !u!114 &7286672437741271215
 MonoBehaviour:
   m_ObjectHideFlags: 0

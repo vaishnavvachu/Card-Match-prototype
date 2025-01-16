@@ -1,13 +1,28 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;
+    
     public GameObject cardPrefab; 
     public Transform cardParent; 
     public Vector2 gridSize; 
     public float spacing = 10f;
-    private int[] cardIDs;
+    public List<Sprite> allSprites;
+    private int[] _cardIDs;
+    
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
 
+        DontDestroyOnLoad(gameObject);
+    }
+    
+    
     void Start()
     {
         GenerateGrid((int)gridSize.x, (int)gridSize.y);
@@ -15,25 +30,37 @@ public class GameManager : MonoBehaviour
 
     void GenerateGrid(int rows, int cols)
     {
-        
         int totalCards = rows * cols;
-        cardIDs = new int[totalCards];
+        _cardIDs = new int[totalCards];
+        
         for (int i = 0; i < totalCards / 2; i++)
         {
-            cardIDs[i * 2] = i;
-            cardIDs[i * 2 + 1] = i;
+            _cardIDs[i * 2] = i;
+            _cardIDs[i * 2 + 1] = i;
+        }
+        ShuffleArray(_cardIDs);
+
+        int spritesRequired = totalCards / 2;
+        if (allSprites.Count < spritesRequired)
+        {
+            Debug.LogError("Not enough sprites");
+            return;
         }
 
-        ShuffleArray(cardIDs);
-
+        // Create the grid and assign sprites
         for (int row = 0; row < rows; row++)
         {
             for (int col = 0; col < cols; col++)
             {
                 int index = row * cols + col;
                 Vector3 position = new Vector3(col * spacing, -row * spacing, 0);
+                
                 GameObject card = Instantiate(cardPrefab, position, Quaternion.identity, cardParent);
-                card.GetComponent<Card>().cardID = cardIDs[index];
+                Card cardComp = card.GetComponent<Card>();
+
+                cardComp.cardID = _cardIDs[index];
+                Sprite cardSprite = allSprites[_cardIDs[index]];
+                cardComp.SetCardSprite(cardSprite);
             }
         }
     }
