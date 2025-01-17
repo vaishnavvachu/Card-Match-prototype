@@ -9,6 +9,8 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance;
 
     [Header("UI Elements")]
+    [SerializeField] private  GameObject levelSelectionMenu;
+    [SerializeField] private  GameObject inGameUI;
     [SerializeField] private  TextMeshProUGUI turnsText; 
     [SerializeField] private  TextMeshProUGUI matchesText; 
     [SerializeField] private  GameObject gameOverCanvas;
@@ -28,9 +30,22 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
+        ShowLevelSelectionMenu();
         ResetUI();
     }
 
+    public void ShowLevelSelectionMenu()
+    {
+        levelSelectionMenu.SetActive(true);
+        inGameUI.SetActive(false);
+        gameOverCanvas.SetActive(false);
+    }
+    public void ShowInGameUI()
+    {
+        levelSelectionMenu.SetActive(false);
+        inGameUI.SetActive(true);
+        gameOverCanvas.SetActive(false);
+    }
     public void IncrementTurns()
     {
         Turns++;

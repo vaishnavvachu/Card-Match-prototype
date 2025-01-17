@@ -11,8 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private  Vector2 gridSize;
     [SerializeField] private  GridLayoutGroup gridLayoutGroup;
     [SerializeField] private  List<Sprite> cardFrontSprites;
-    [SerializeField] private  Sprite backSprite;
-
+    [SerializeField] private LevelData currentLevelData;
     private int[] _cardIDs;
     private int _totalCards;
     private int _matchedCards;
@@ -28,13 +27,17 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        GenerateGrid((int)gridSize.x, (int)gridSize.y);
+        if (currentLevelData != null)
+        {
+            GenerateGrid(currentLevelData.rows, currentLevelData.cols, currentLevelData.cardSprites, currentLevelData.backSprite);
+        }
+        
     }
 
-    void GenerateGrid(int rows, int cols)
+    void GenerateGrid(int rows, int cols, List<Sprite> cardSprites, Sprite backSprite)
     {
         AdjustGridLayout(rows, cols);
-        
+        cardFrontSprites = cardSprites;
         _totalCards = rows * cols;
 
         if (_totalCards % 2 != 0)
@@ -72,7 +75,7 @@ public class GameManager : MonoBehaviour
             Card cardComp = card.GetComponent<Card>();
 
             cardComp.cardID = _cardIDs[i];
-            Sprite cardSprite = cardFrontSprites[_cardIDs[i]];
+            Sprite cardSprite = cardFrontSprites[_cardIDs[i] % cardSprites.Count];
             cardComp.SetCardFrontSprite(cardSprite);
             cardComp.SetCardBackSprite(backSprite);
             cardComp.ShowFrontInitially();
@@ -126,7 +129,11 @@ public class GameManager : MonoBehaviour
             (array[i], array[randomIndex]) = (array[randomIndex], array[i]);
         }
     }
-    
+    public void SetLevel(LevelData levelData)
+    {
+        currentLevelData = levelData;
+        GenerateGrid(levelData.rows, levelData.cols, levelData.cardSprites, levelData.backSprite);
+    }
     public void SaveGame()
     {
         SaveData saveData = new SaveData
@@ -174,7 +181,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-        GenerateGrid(saveData.rows, saveData.cols);
+        //GenerateGrid(saveData.rows, saveData.cols);
 
         for (int i = 0; i < cardParent.childCount; i++)
         {

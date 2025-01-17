@@ -53,31 +53,26 @@ public class CardController : MonoBehaviour
     
     private void DestroyMatchedCards()
     {
-        // Scale down and destroy first card
         if (_firstCard != null)
         {
             _firstCard.transform.DOScale(0, 0.5f).SetEase(Ease.InBack).OnComplete(() =>
             {
-                if (_firstCard != null) // Null check before destroying
+                if (_firstCard != null) 
                 {
                     Destroy(_firstCard.gameObject);
                 }
             });
         }
-
-        // Scale down and destroy second card
         if (_secondCard != null)
         {
             _secondCard.transform.DOScale(0, 0.5f).SetEase(Ease.InBack).OnComplete(() =>
             {
-                if (_secondCard != null) // Null check before destroying
+                if (_secondCard != null) 
                 {
                     Destroy(_secondCard.gameObject);
                 }
             });
         }
-
-        // Reset references after animation starts
         _firstCard = null;
         _secondCard = null;
     }
