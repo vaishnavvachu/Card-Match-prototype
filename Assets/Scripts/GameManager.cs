@@ -119,7 +119,7 @@ public class GameManager : MonoBehaviour
     public void ResetCombo()
     {
         _currentCombo = 0;
-        UIManager.Instance.UpdateCombo(_currentCombo); // Reset combo in UI
+        UIManager.Instance.UpdateCombo(_currentCombo); 
     }
 
     public void IncreaseCombo()
@@ -128,7 +128,7 @@ public class GameManager : MonoBehaviour
         if (_currentCombo > _highestCombo)
             _highestCombo = _currentCombo;
 
-        UIManager.Instance.UpdateCombo(_currentCombo); // Update combo in UI
+        UIManager.Instance.UpdateCombo(_currentCombo); 
     }
 
     public int GetHighestCombo()
@@ -202,7 +202,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-        //GenerateGrid(saveData.rows, saveData.cols);
+        GenerateGrid(saveData.rows, saveData.cols,currentLevelData.cardSprites, currentLevelData.backSprite);
 
         for (int i = 0; i < cardParent.childCount; i++)
         {
