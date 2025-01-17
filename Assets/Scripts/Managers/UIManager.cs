@@ -16,7 +16,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private  GameObject gameOverCanvas;
     [SerializeField] private  TextMeshProUGUI gameOverTurnsText; 
     [SerializeField] private  TextMeshProUGUI gameOverMatchesText; 
-
+    [SerializeField] private  TextMeshProUGUI comboText;
+    [SerializeField] private  TextMeshProUGUI highestComboText; 
     public int Turns { get; private set; }
     public int Matches { get; private set; }
 
@@ -86,6 +87,9 @@ public class UIManager : MonoBehaviour
 
             if (gameOverMatchesText != null)
                 gameOverMatchesText.text = $"Matches: {Matches}";
+            
+            if(highestComboText != null)
+                highestComboText.text = $"High Combo: {GameManager.Instance.GetHighestCombo().ToString()}";
         }
     }
 
@@ -104,6 +108,14 @@ public class UIManager : MonoBehaviour
     {
         Matches = matches;
         matchesText.text = "Matches: " + Matches;
+    }
+    
+    public void UpdateCombo(int combo)
+    {
+        if (comboText != null)
+        {
+            comboText.text = combo > 0 ? $"Combo: {combo}" : ""; // Show combo only if > 0
+        }
     }
     
     public void OnSaveButtonPressed()

@@ -15,7 +15,10 @@ public class GameManager : MonoBehaviour
     private int[] _cardIDs;
     private int _totalCards;
     private int _matchedCards;
+    private int _currentCombo;
+    private int _highestCombo;
 
+   
     private void Awake()
     {
         if (Instance == null)
@@ -113,7 +116,25 @@ public class GameManager : MonoBehaviour
             GameOver();
         }
     }
+    public void ResetCombo()
+    {
+        _currentCombo = 0;
+        UIManager.Instance.UpdateCombo(_currentCombo); // Reset combo in UI
+    }
 
+    public void IncreaseCombo()
+    {
+        _currentCombo++;
+        if (_currentCombo > _highestCombo)
+            _highestCombo = _currentCombo;
+
+        UIManager.Instance.UpdateCombo(_currentCombo); // Update combo in UI
+    }
+
+    public int GetHighestCombo()
+    {
+        return _highestCombo;
+    }
     private void GameOver()
     {
         Debug.Log("Game Over! All cards matched.");
@@ -203,7 +224,5 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("Game Loaded!");
     }
-
-
-
+    
 }

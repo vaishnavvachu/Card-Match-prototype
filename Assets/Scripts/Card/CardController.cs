@@ -43,10 +43,12 @@ public class CardController : MonoBehaviour
             AudioManager.Instance.PlayCardMatchSound();
             DestroyMatchedCards();
             GameManager.Instance.CardMatched();
+            GameManager.Instance.IncreaseCombo();
         }
         else
         {
             AudioManager.Instance.PlayCardMismatchSound();
+            GameManager.Instance.ResetCombo();
             Invoke(nameof(ResetSelection), 0.5f); 
         }
     }
