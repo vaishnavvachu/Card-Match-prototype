@@ -16,6 +16,8 @@ public class CardController : MonoBehaviour
     {
         if (card.isMatched || card == _firstCard || _secondCard != null) return;
 
+        AudioManager.Instance.PlayCardClickSound();
+        
         if (_firstCard == null)
         {
             _firstCard = card;
@@ -32,19 +34,18 @@ public class CardController : MonoBehaviour
     private void CheckMatch()
     {
         Turns++;
-        Debug.Log("TURNS: "+Turns);
         if (_firstCard.cardID == _secondCard.cardID)
         {
             // Cards match
             _firstCard.isMatched = true;
             _secondCard.isMatched = true;
             Matches++;
-            Debug.Log("MATCHES: "+Matches);
+            AudioManager.Instance.PlayCardMatchSound();
             DestroyMatchedCards();
         }
         else
         {
-            
+            AudioManager.Instance.PlayCardMismatchSound();
             Invoke(nameof(ResetSelection), 0.5f); 
         }
     }
