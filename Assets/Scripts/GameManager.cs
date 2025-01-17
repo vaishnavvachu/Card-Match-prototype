@@ -1,18 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    public GameObject cardPrefab; 
-    public Transform cardParent;
-    public Vector2 gridSize;
-    public GridLayoutGroup gridLayoutGroup;
-    public float spacing = 10f;
-    public List<Sprite> allSprites;
-    public Sprite backSprite;
+    [SerializeField] private  GameObject cardPrefab; 
+    [SerializeField] private  Transform cardParent;
+    [SerializeField] private  Vector2 gridSize;
+    [SerializeField] private  GridLayoutGroup gridLayoutGroup;
+    [SerializeField] private  List<Sprite> cardFrontSprites;
+    [SerializeField] private  Sprite backSprite;
 
     private int[] _cardIDs;
     private int _totalCards;
@@ -35,7 +35,6 @@ public class GameManager : MonoBehaviour
 
     void GenerateGrid(int rows, int cols)
     {
-
         AdjustGridLayout(rows, cols);
         
         _totalCards = rows * cols;
@@ -58,7 +57,7 @@ public class GameManager : MonoBehaviour
 
         int pairsRequired = rows>cols ? cols : rows;
 
-        if (allSprites.Count < pairsRequired)
+        if (cardFrontSprites.Count < pairsRequired)
         {
             Debug.LogError("Not enough sprites.");
             return;
@@ -75,7 +74,7 @@ public class GameManager : MonoBehaviour
             Card cardComp = card.GetComponent<Card>();
 
             cardComp.cardID = _cardIDs[i];
-            Sprite cardSprite = allSprites[_cardIDs[i]];
+            Sprite cardSprite = cardFrontSprites[_cardIDs[i]];
             cardComp.SetCardFrontSprite(cardSprite);
             cardComp.SetCardBackSprite(backSprite);
             cardComp.ShowFrontInitially();
@@ -90,8 +89,6 @@ public class GameManager : MonoBehaviour
             Debug.LogError("CardParent must have a GridLayoutGroup and RectTransform.");
             return;
         }
-
-        // Set the constraint mode
         gridLayoutGroup.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
         gridLayoutGroup.constraintCount = cols;
 

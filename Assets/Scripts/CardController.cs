@@ -5,8 +5,6 @@ public class CardController : MonoBehaviour
 {
     public static CardController Instance;
     private Card _firstCard, _secondCard;
-    public int Turns { get; private set; } 
-    public int Matches { get; private set; }
     private void Awake()
     {
         Instance = this;
@@ -41,7 +39,6 @@ public class CardController : MonoBehaviour
             // Cards match
             _firstCard.isMatched = true;
             _secondCard.isMatched = true;
-            Matches++;
             UIManager.Instance.IncrementMatches(); 
             AudioManager.Instance.PlayCardMatchSound();
             DestroyMatchedCards();
@@ -53,16 +50,38 @@ public class CardController : MonoBehaviour
             Invoke(nameof(ResetSelection), 0.5f); 
         }
     }
-
-
+    
     private void DestroyMatchedCards()
     {
-        _firstCard.transform.DOScale(0, 0.5f).SetEase(Ease.InBack).OnComplete(() => Destroy(_firstCard.gameObject));
-        _secondCard.transform.DOScale(0, 0.5f).SetEase(Ease.InBack).OnComplete(() => Destroy(_secondCard.gameObject));
+        // Scale down and destroy first card
+        if (_firstCard != null)
+        {
+            _firstCard.transform.DOScale(0, 0.5f).SetEase(Ease.InBack).OnComplete(() =>
+            {
+                if (_firstCard != null) // Null check before destroying
+                {
+                    Destroy(_firstCard.gameObject);
+                }
+            });
+        }
 
+        // Scale down and destroy second card
+        if (_secondCard != null)
+        {
+            _secondCard.transform.DOScale(0, 0.5f).SetEase(Ease.InBack).OnComplete(() =>
+            {
+                if (_secondCard != null) // Null check before destroying
+                {
+                    Destroy(_secondCard.gameObject);
+                }
+            });
+        }
+
+        // Reset references after animation starts
         _firstCard = null;
         _secondCard = null;
     }
+
 
     private void ResetSelection()
     {

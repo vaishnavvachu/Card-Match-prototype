@@ -7,11 +7,11 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance;
 
     [Header("UI Elements")]
-    public TextMeshProUGUI turnsText; 
-    public TextMeshProUGUI matchesText; 
-    public GameObject gameOverCanvas;
-    public TextMeshProUGUI gameOverTurnsText; 
-    public TextMeshProUGUI gameOverMatchesText; 
+    [SerializeField] private  TextMeshProUGUI turnsText; 
+    [SerializeField] private  TextMeshProUGUI matchesText; 
+    [SerializeField] private  GameObject gameOverCanvas;
+    [SerializeField] private  TextMeshProUGUI gameOverTurnsText; 
+    [SerializeField] private  TextMeshProUGUI gameOverMatchesText; 
 
     private int _turns = 0;
     private int _matches = 0; 

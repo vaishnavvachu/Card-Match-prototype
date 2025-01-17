@@ -6,10 +6,10 @@ public class AudioManager : MonoBehaviour
     public static AudioManager Instance;
 
     [Header("Audio Clips")]
-    public AudioClip cardClickSound;
-    public AudioClip cardMatchSound;
-    public AudioClip cardMismatchSound;
-    public AudioClip gameOverSound;
+    [SerializeField] private  AudioClip cardClickSound;
+    [SerializeField] private  AudioClip cardMatchSound;
+    [SerializeField] private  AudioClip cardMismatchSound;
+    [SerializeField] private  AudioClip gameOverSound;
 
     private AudioSource _audioSource;
 

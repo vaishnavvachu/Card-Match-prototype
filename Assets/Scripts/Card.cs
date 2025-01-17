@@ -1,18 +1,15 @@
-
-using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 
 public class Card : MonoBehaviour
 {
-    public int cardID; 
-    public bool isMatched = false;
-    public Image cardImage;
-    public Sprite frontSprite; 
-    public Sprite backSprite;
+    [HideInInspector] public int cardID; 
+    [HideInInspector] public bool isMatched = false;
+    [SerializeField] private  Image cardImage;
+    [SerializeField] private  Sprite frontSprite; 
+    [SerializeField] private  Sprite backSprite;
     
     private bool _isFlipped = false;
     
