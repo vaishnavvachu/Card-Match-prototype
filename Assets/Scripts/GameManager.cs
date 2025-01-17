@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -24,8 +23,7 @@ public class GameManager : MonoBehaviour
             Instance = this;
         else
             Destroy(gameObject);
-
-        DontDestroyOnLoad(gameObject);
+        
     }
 
     void Start()
@@ -128,4 +126,77 @@ public class GameManager : MonoBehaviour
             (array[i], array[randomIndex]) = (array[randomIndex], array[i]);
         }
     }
+    
+    public void SaveGame()
+    {
+        SaveData saveData = new SaveData
+        {
+            rows = (int)gridSize.x,
+            cols = (int)gridSize.y,
+            cardIDs = new List<int>(_cardIDs),
+            matchedCards = new List<bool>(),
+            turns = UIManager.Instance.Turns,
+            matches = UIManager.Instance.Matches
+        };
+
+        foreach (Transform cardTransform in cardParent)
+        {
+            Card card = cardTransform.GetComponent<Card>();
+            saveData.matchedCards.Add(card.isMatched);
+        }
+
+        string json = JsonUtility.ToJson(saveData);
+
+        PlayerPrefs.SetString("SaveData", json);
+        PlayerPrefs.Save();
+
+        Debug.Log("Game Saved!");
+    }
+    public void LoadGame()
+    {
+        if (!PlayerPrefs.HasKey("SaveData"))
+        {
+            Debug.LogError("No save data found!");
+            return;
+        }
+
+        string json = PlayerPrefs.GetString("SaveData");
+        SaveData saveData = JsonUtility.FromJson<SaveData>(json);
+        if (saveData.matchedCards.Count != _cardIDs.Length)
+        {
+            Debug.LogError("Saved matched card data doesn't match the current grid size.");
+            return;
+        }
+        gridSize = new Vector2(saveData.rows, saveData.cols);
+        _cardIDs = saveData.cardIDs.ToArray();
+
+        foreach (Transform child in cardParent)
+        {
+            Destroy(child.gameObject);
+        }
+        GenerateGrid(saveData.rows, saveData.cols);
+
+        for (int i = 0; i < cardParent.childCount; i++)
+        {
+            Card card = cardParent.GetChild(i).GetComponent<Card>();
+        
+            if (i < saveData.matchedCards.Count)
+            {
+                card.isMatched = saveData.matchedCards[i];
+
+                if (card.isMatched)
+                {
+                    card.gameObject.SetActive(false);
+                }
+            }
+        }
+
+        UIManager.Instance.UpdateTurns(saveData.turns);
+        UIManager.Instance.UpdateMatches(saveData.matches);
+
+        Debug.Log("Game Loaded!");
+    }
+
+
+
 }

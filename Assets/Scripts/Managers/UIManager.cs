@@ -1,5 +1,7 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -13,8 +15,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private  TextMeshProUGUI gameOverTurnsText; 
     [SerializeField] private  TextMeshProUGUI gameOverMatchesText; 
 
-    private int _turns = 0;
-    private int _matches = 0; 
+    public int Turns { get; private set; }
+    public int Matches { get; private set; }
 
     private void Awake()
     {
@@ -31,26 +33,26 @@ public class UIManager : MonoBehaviour
 
     public void IncrementTurns()
     {
-        _turns++;
+        Turns++;
         UpdateTurnsUI();
     }
 
     public void IncrementMatches()
     {
-        _matches++;
+        Matches++;
         UpdateMatchesUI();
     }
 
     private void UpdateTurnsUI()
     {
         if (turnsText != null)
-            turnsText.text = $"Turns: {_turns}";
+            turnsText.text = $"Turns: {Turns}";
     }
 
     private void UpdateMatchesUI()
     {
         if (matchesText != null)
-            matchesText.text = $"Matches: {_matches}";
+            matchesText.text = $"Matches: {Matches}";
     }
 
     public void ShowGameOver()
@@ -65,10 +67,10 @@ public class UIManager : MonoBehaviour
             gameOverCanvas.SetActive(true);
 
             if (gameOverTurnsText != null)
-                gameOverTurnsText.text = $"Turns: {_turns}";
+                gameOverTurnsText.text = $"Turns: {Turns}";
 
             if (gameOverMatchesText != null)
-                gameOverMatchesText.text = $"Matches: {_matches}";
+                gameOverMatchesText.text = $"Matches: {Matches}";
         }
     }
 
@@ -77,13 +79,38 @@ public class UIManager : MonoBehaviour
         if (gameOverCanvas != null)
             gameOverCanvas.SetActive(false);
     }
+    public void UpdateTurns(int turns)
+    {
+        Turns = turns;
+        turnsText.text = "Turns: " + Turns;
+    }
 
+    public void UpdateMatches(int matches)
+    {
+        Matches = matches;
+        matchesText.text = "Matches: " + Matches;
+    }
+    
+    public void OnSaveButtonPressed()
+    {
+        GameManager.Instance.SaveGame();
+    }
+
+    public void OnLoadButtonPressed()
+    {
+        GameManager.Instance.LoadGame();
+    }
     public void ResetUI()
     {
-        _turns = 0;
-        _matches = 0;
+        Turns = 0;
+        Matches = 0;
         UpdateTurnsUI();
         UpdateMatchesUI();
         HideGameOver();
+    }
+    
+    public void ReplayGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
