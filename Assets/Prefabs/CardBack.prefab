@@ -11,9 +11,8 @@ GameObject:
   - component: {fileID: 5112373925582212916}
   - component: {fileID: 5112373925582212919}
   - component: {fileID: 8590037741273585067}
-  - component: {fileID: 7286672437741271215}
-  - component: {fileID: 2065265720382925245}
   - component: {fileID: 4126482773538453438}
+  - component: {fileID: 2065265720382925245}
   m_Layer: 0
   m_Name: CardBack
   m_TagString: Untagged
@@ -102,8 +101,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardID: 0
   isMatched: 0
-  frontSpriteRenderer: {fileID: 5112373925582212919}
---- !u!114 &7286672437741271215
+  spriteRenderer: {fileID: 5112373925582212919}
+  frontSprite: {fileID: 0}
+  backSprite: {fileID: 0}
+--- !u!114 &4126482773538453438
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -112,11 +113,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5112373925582212918}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b54f9e1e8828a63449eda517efc45844, type: 3}
+  m_Script: {fileID: 11500000, guid: ce08b910d15d0444c9f8e9a137a8121a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frontSprite: {fileID: 177200736, guid: b7ae29264b8a9d04a8b0e7c96cc20cde, type: 3}
-  backSprite: {fileID: -664037141, guid: 33ed0d17a351ecd47aa082d05803d6ef, type: 3}
 --- !u!61 &2065265720382925245
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -143,15 +142,3 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.75, y: 0.75}
   m_EdgeRadius: 0
---- !u!114 &4126482773538453438
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5112373925582212918}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce08b910d15d0444c9f8e9a137a8121a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public Vector2 gridSize; 
     public float spacing = 10f;
     public List<Sprite> allSprites;
+    public Sprite backSprite;
     private int[] _cardIDs;
     
     private void Awake()
@@ -46,8 +47,6 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Not enough sprites");
             return;
         }
-
-        // Create the grid and assign sprites
         for (int row = 0; row < rows; row++)
         {
             for (int col = 0; col < cols; col++)
@@ -60,7 +59,9 @@ public class GameManager : MonoBehaviour
 
                 cardComp.cardID = _cardIDs[index];
                 Sprite cardSprite = allSprites[_cardIDs[index]];
-                cardComp.SetCardSprite(cardSprite);
+                cardComp.SetCardFrontSprite(cardSprite);
+                cardComp.SetCardBackSprite(backSprite);
+                cardComp.ShowFrontInitially();
             }
         }
     }

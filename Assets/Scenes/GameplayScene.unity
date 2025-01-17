@@ -293,6 +293,7 @@ MonoBehaviour:
   - {fileID: 902384499, guid: b7ae29264b8a9d04a8b0e7c96cc20cde, type: 3}
   - {fileID: -1973742455, guid: b7ae29264b8a9d04a8b0e7c96cc20cde, type: 3}
   - {fileID: 980381173, guid: b7ae29264b8a9d04a8b0e7c96cc20cde, type: 3}
+  backSprite: {fileID: -71559901, guid: 33ed0d17a351ecd47aa082d05803d6ef, type: 3}
 --- !u!4 &1253096596
 Transform:
   m_ObjectHideFlags: 0

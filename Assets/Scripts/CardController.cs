@@ -4,8 +4,7 @@ using UnityEngine;
 public class CardController : MonoBehaviour
 {
     public static CardController Instance;
-    private Card firstCard, secondCard;
-
+    private Card _firstCard, _secondCard;
     public int Turns { get; private set; } 
     public int Matches { get; private set; }
     private void Awake()
@@ -15,16 +14,16 @@ public class CardController : MonoBehaviour
 
     public void SelectCard(Card card)
     {
-        if (card.isMatched || card == firstCard || secondCard != null) return;
+        if (card.isMatched || card == _firstCard || _secondCard != null) return;
 
-        if (firstCard == null)
+        if (_firstCard == null)
         {
-            firstCard = card;
+            _firstCard = card;
             ScaleCard(card.transform, true);
         }
         else
         {
-            secondCard = card;
+            _secondCard = card;
             ScaleCard(card.transform, true);
             CheckMatch();
         }
@@ -34,11 +33,11 @@ public class CardController : MonoBehaviour
     {
         Turns++;
         Debug.Log("TURNS: "+Turns);
-        if (firstCard.cardID == secondCard.cardID)
+        if (_firstCard.cardID == _secondCard.cardID)
         {
             // Cards match
-            firstCard.isMatched = true;
-            secondCard.isMatched = true;
+            _firstCard.isMatched = true;
+            _secondCard.isMatched = true;
             Matches++;
             Debug.Log("MATCHES: "+Matches);
             DestroyMatchedCards();
@@ -53,30 +52,30 @@ public class CardController : MonoBehaviour
 
     private void DestroyMatchedCards()
     {
-        firstCard.transform.DOScale(0, 0.5f).SetEase(Ease.InBack).OnComplete(() => Destroy(firstCard.gameObject));
-        secondCard.transform.DOScale(0, 0.5f).SetEase(Ease.InBack).OnComplete(() => Destroy(secondCard.gameObject));
+        _firstCard.transform.DOScale(0, 0.5f).SetEase(Ease.InBack).OnComplete(() => Destroy(_firstCard.gameObject));
+        _secondCard.transform.DOScale(0, 0.5f).SetEase(Ease.InBack).OnComplete(() => Destroy(_secondCard.gameObject));
 
-        firstCard = null;
-        secondCard = null;
+        _firstCard = null;
+        _secondCard = null;
     }
 
     private void ResetSelection()
     {
-        if (firstCard != null)
+        if (_firstCard != null)
         {
-            ResetCardState(firstCard);
-            firstCard = null;
+            ResetCardState(_firstCard);
+            _firstCard = null;
         }
-        if (secondCard != null)
+        if (_secondCard != null)
         {
-            ResetCardState(secondCard);
-            secondCard = null;
+            ResetCardState(_secondCard);
+            _secondCard = null;
         }
     }
 
     private void ResetCardState(Card card)
     {
-        card.GetComponent<CardFlip>().ResetFlip(); 
+        card.ResetFlip(); 
         card.transform.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutBack); 
     }
 
