@@ -32,28 +32,36 @@ public class GameManager : MonoBehaviour
     void GenerateGrid(int rows, int cols)
     {
         int totalCards = rows * cols;
-        _cardIDs = new int[totalCards];
         
+        if (totalCards % 2 != 0)
+        {
+            Debug.LogError("Grid must have an even number of cards for proper matching.");
+            return; // Exit without creating the grid
+        }
+        _cardIDs = new int[totalCards];
+
         for (int i = 0; i < totalCards / 2; i++)
         {
             _cardIDs[i * 2] = i;
             _cardIDs[i * 2 + 1] = i;
         }
+
         ShuffleArray(_cardIDs);
 
-        int spritesRequired = totalCards / 2;
-        if (allSprites.Count < spritesRequired)
+        int pairsRequired = rows>cols ? cols : rows;
+        if (allSprites.Count < pairsRequired)
         {
-            Debug.LogError("Not enough sprites");
+            Debug.LogError($"Not enough sprites");
             return;
         }
+
         for (int row = 0; row < rows; row++)
         {
             for (int col = 0; col < cols; col++)
             {
                 int index = row * cols + col;
                 Vector3 position = new Vector3(col * spacing, -row * spacing, 0);
-                
+
                 GameObject card = Instantiate(cardPrefab, position, Quaternion.identity, cardParent);
                 Card cardComp = card.GetComponent<Card>();
 
@@ -61,10 +69,11 @@ public class GameManager : MonoBehaviour
                 Sprite cardSprite = allSprites[_cardIDs[index]];
                 cardComp.SetCardFrontSprite(cardSprite);
                 cardComp.SetCardBackSprite(backSprite);
-                cardComp.ShowFrontInitially();
+                cardComp.ShowFrontInitially(); 
             }
         }
     }
+
 
     void ShuffleArray(int[] array)
     {

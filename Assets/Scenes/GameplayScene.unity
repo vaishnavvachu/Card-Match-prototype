@@ -237,7 +237,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardPrefab: {fileID: 5112373925582212918, guid: 463046611bc098c4f9089c7758d752ed, type: 3}
   cardParent: {fileID: 2027840100}
-  gridSize: {x: 3, y: 3}
+  gridSize: {x: 3, y: 4}
   spacing: 2
   allSprites:
   - {fileID: 177200736, guid: b7ae29264b8a9d04a8b0e7c96cc20cde, type: 3}
