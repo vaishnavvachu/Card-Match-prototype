@@ -31,17 +31,21 @@ public class CardController : MonoBehaviour
         }
     }
 
+
     private void CheckMatch()
     {
-        Turns++;
+     
+        UIManager.Instance.IncrementTurns();
         if (_firstCard.cardID == _secondCard.cardID)
         {
             // Cards match
             _firstCard.isMatched = true;
             _secondCard.isMatched = true;
             Matches++;
+            UIManager.Instance.IncrementMatches(); 
             AudioManager.Instance.PlayCardMatchSound();
             DestroyMatchedCards();
+            GameManager.Instance.CardMatched();
         }
         else
         {

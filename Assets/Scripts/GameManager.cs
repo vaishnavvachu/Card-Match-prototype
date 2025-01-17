@@ -1,18 +1,20 @@
 using System.Collections.Generic;
 using UnityEngine;
-
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    
+
     public GameObject cardPrefab; 
     public Transform cardParent; 
     public Vector2 gridSize; 
     public float spacing = 10f;
     public List<Sprite> allSprites;
     public Sprite backSprite;
+
     private int[] _cardIDs;
-    
+    private int _totalCards;
+    private int _matchedCards;
+
     private void Awake()
     {
         if (Instance == null)
@@ -22,8 +24,7 @@ public class GameManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
     }
-    
-    
+
     void Start()
     {
         GenerateGrid((int)gridSize.x, (int)gridSize.y);
@@ -31,16 +32,18 @@ public class GameManager : MonoBehaviour
 
     void GenerateGrid(int rows, int cols)
     {
-        int totalCards = rows * cols;
-        
-        if (totalCards % 2 != 0)
+        _totalCards = rows * cols;
+
+        if (_totalCards % 2 != 0)
         {
             Debug.LogError("Grid must have an even number of cards for proper matching.");
-            return; // Exit without creating the grid
+            return;
         }
-        _cardIDs = new int[totalCards];
 
-        for (int i = 0; i < totalCards / 2; i++)
+        _matchedCards = 0; 
+        _cardIDs = new int[_totalCards];
+
+        for (int i = 0; i < _totalCards / 2; i++)
         {
             _cardIDs[i * 2] = i;
             _cardIDs[i * 2 + 1] = i;
@@ -49,9 +52,10 @@ public class GameManager : MonoBehaviour
         ShuffleArray(_cardIDs);
 
         int pairsRequired = rows>cols ? cols : rows;
+        
         if (allSprites.Count < pairsRequired)
         {
-            Debug.LogError($"Not enough sprites");
+            Debug.LogError("Not enough sprites.");
             return;
         }
 
@@ -69,11 +73,26 @@ public class GameManager : MonoBehaviour
                 Sprite cardSprite = allSprites[_cardIDs[index]];
                 cardComp.SetCardFrontSprite(cardSprite);
                 cardComp.SetCardBackSprite(backSprite);
-                cardComp.ShowFrontInitially(); 
+                cardComp.ShowFrontInitially();
             }
         }
     }
 
+    public void CardMatched()
+    {
+        _matchedCards += 2; 
+        if (_matchedCards >= _totalCards)
+        {
+            GameOver();
+        }
+    }
+
+    private void GameOver()
+    {
+        Debug.Log("Game Over! All cards matched.");
+        AudioManager.Instance.PlayGameOverSound();
+        UIManager.Instance.ShowGameOver();
+    }
 
     void ShuffleArray(int[] array)
     {
@@ -84,4 +103,3 @@ public class GameManager : MonoBehaviour
         }
     }
 }
-
