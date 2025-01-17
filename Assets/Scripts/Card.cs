@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 
 public class Card : MonoBehaviour
 {
     public int cardID; 
     public bool isMatched = false;
-    public SpriteRenderer spriteRenderer;
+    public Image cardImage;
     public Sprite frontSprite; 
     public Sprite backSprite;
     
@@ -18,7 +19,7 @@ public class Card : MonoBehaviour
     public void SetCardFrontSprite(Sprite sprite)
     {
         frontSprite = sprite;
-        spriteRenderer.sprite = sprite;
+        cardImage.sprite = sprite;
     }
 
     public void SetCardBackSprite(Sprite sprite)
@@ -41,16 +42,16 @@ public class Card : MonoBehaviour
 
     private void ShowBack()
     {
-        spriteRenderer.sprite = backSprite;
+        cardImage.sprite = backSprite;
         transform.rotation = Quaternion.identity; 
     }
 
     private void ShowFront()
     {
-        spriteRenderer.sprite = frontSprite;
+        cardImage.sprite = frontSprite;
     }
 
-    private void OnMouseDown()
+    public void OnMouseDown()
     {
         if (!_isFlipped)
         {

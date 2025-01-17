@@ -1,12 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
     public GameObject cardPrefab; 
-    public Transform cardParent; 
-    public Vector2 gridSize; 
+    public Transform cardParent;
+    public Vector2 gridSize;
+    public GridLayoutGroup gridLayoutGroup;
     public float spacing = 10f;
     public List<Sprite> allSprites;
     public Sprite backSprite;
@@ -32,6 +35,9 @@ public class GameManager : MonoBehaviour
 
     void GenerateGrid(int rows, int cols)
     {
+
+        AdjustGridLayout(rows, cols);
+        
         _totalCards = rows * cols;
 
         if (_totalCards % 2 != 0)
@@ -42,7 +48,6 @@ public class GameManager : MonoBehaviour
 
         _matchedCards = 0; 
         _cardIDs = new int[_totalCards];
-
         for (int i = 0; i < _totalCards / 2; i++)
         {
             _cardIDs[i * 2] = i;
@@ -52,31 +57,55 @@ public class GameManager : MonoBehaviour
         ShuffleArray(_cardIDs);
 
         int pairsRequired = rows>cols ? cols : rows;
-        
+
         if (allSprites.Count < pairsRequired)
         {
             Debug.LogError("Not enough sprites.");
             return;
         }
 
-        for (int row = 0; row < rows; row++)
+        foreach (Transform child in cardParent)
         {
-            for (int col = 0; col < cols; col++)
-            {
-                int index = row * cols + col;
-                Vector3 position = new Vector3(col * spacing, -row * spacing, 0);
+            Destroy(child.gameObject);
+        }
 
-                GameObject card = Instantiate(cardPrefab, position, Quaternion.identity, cardParent);
-                Card cardComp = card.GetComponent<Card>();
+        for (int i = 0; i < _totalCards; i++)
+        {
+            GameObject card = Instantiate(cardPrefab, cardParent);
+            Card cardComp = card.GetComponent<Card>();
 
-                cardComp.cardID = _cardIDs[index];
-                Sprite cardSprite = allSprites[_cardIDs[index]];
-                cardComp.SetCardFrontSprite(cardSprite);
-                cardComp.SetCardBackSprite(backSprite);
-                cardComp.ShowFrontInitially();
-            }
+            cardComp.cardID = _cardIDs[i];
+            Sprite cardSprite = allSprites[_cardIDs[i]];
+            cardComp.SetCardFrontSprite(cardSprite);
+            cardComp.SetCardBackSprite(backSprite);
+            cardComp.ShowFrontInitially();
         }
     }
+    void AdjustGridLayout(int rows, int cols)
+    {
+        RectTransform parentRect = cardParent.GetComponent<RectTransform>();
+
+        if (gridLayoutGroup == null || parentRect == null)
+        {
+            Debug.LogError("CardParent must have a GridLayoutGroup and RectTransform.");
+            return;
+        }
+
+        // Set the constraint mode
+        gridLayoutGroup.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+        gridLayoutGroup.constraintCount = cols;
+
+        float parentWidth = parentRect.rect.width;
+        float parentHeight = parentRect.rect.height;
+
+        float cellWidth = (parentWidth - gridLayoutGroup.spacing.x * (cols - 1)) / cols;
+        float cellHeight = (parentHeight - gridLayoutGroup.spacing.y * (rows - 1)) / rows;
+
+        float cardSize = Mathf.Min(cellWidth, cellHeight);
+        gridLayoutGroup.cellSize = new Vector2(cardSize, cardSize);
+    }
+
+
 
     public void CardMatched()
     {
